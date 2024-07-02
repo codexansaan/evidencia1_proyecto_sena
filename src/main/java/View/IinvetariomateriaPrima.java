@@ -78,6 +78,7 @@ public class IinvetariomateriaPrima extends javax.swing.JFrame {
         setLocationRelativeTo(null);
 
     }
+
     //getters y setters
 
     public JTextField getTxtNombre() {
