@@ -3,25 +3,45 @@ package View;
 import Controller.ControladorMateriaPrima;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class IinvetariomateriaPrima extends javax.swing.JFrame {
 
-    private JTextField txtNombre;
-    private JTextField txtStock;
-    private JTextField txtunidadMedida;
-    private JTextField txtprecioUnidad;
-    private JTable tableMateriaPrima;
-    private JButton agregarButton;
-    private JButton actualizarButton;
-    private JButton eliminarButton;
+    //Paneles globales
+    private JPanel panelPrincipal;
+    private JPanel panelcampos;
+    private JPanel panelbotones;
+
+    //Titulo y componentes
+    private JPanel titulo;
+    private JLabel encabezado;
+    private JLabel encabezadologo;
+
+    //Panel campos
     private JLabel nombre;
     private JLabel stock;
     private JLabel unidadMedida;
     private JLabel precioUnidadMedida;
+    private JTextField txtNombre;
+    private JTextField txtStock;
+    private JTextField txtunidadMedida;
+    private JTextField txtprecioUnidad;
+
+    //Panel botones
+    private JButton agregarButton;
+    private JButton actualizarButton;
+    private JButton eliminarButton;
     private JButton limpiarButton;
+
+    //Tabla materia prima
+    private JTable tableMateriaPrima;
+
+
+
+
 
     public static void main(String args[]) {
 
@@ -41,38 +61,81 @@ public class IinvetariomateriaPrima extends javax.swing.JFrame {
         }
 
     private void initComponents() {
-        txtNombre = new JTextField(20);
-        txtStock = new JTextField(20);
-        txtunidadMedida = new JTextField(20);
-        txtprecioUnidad = new JTextField(20);
+
+        //Inicializa los componentes
+
+        panelPrincipal = new JPanel(new BorderLayout());
+        titulo = new JPanel( new BorderLayout());
+        panelcampos = new JPanel(new GridLayout(4,4,5,10));
+        panelbotones = new JPanel(new GridLayout(0,1,5,10));
+        tableMateriaPrima = new JTable();
+        encabezado = new JLabel("Inventario materia prima");
+        encabezadologo = new JLabel("Boulevar Soft.");
+        nombre = new JLabel("Nombre");
+        txtNombre = new JTextField(5);
+        stock = new JLabel("Stock");
+        txtStock = new JTextField(5);
+        unidadMedida = new JLabel("Unidad de medida");
+        txtunidadMedida = new JTextField(5);
+        precioUnidadMedida = new JLabel("Precio unidad");
+        txtprecioUnidad = new JTextField(5);
         agregarButton = new JButton("Agregar");
         actualizarButton = new JButton("Actualizar");
         eliminarButton = new JButton("Eliminar");
-        tableMateriaPrima = new JTable();
         limpiarButton = new JButton("Limpiar");
 
-        JPanel panelCampos = new JPanel();
-        panelCampos.add(new JLabel("Nombre:"));
-        panelCampos.add(txtNombre);
-        panelCampos.add(new JLabel("Stock:"));
-        panelCampos.add(txtStock);
-        panelCampos.add(new JLabel("Unidad de medida"));
-        panelCampos.add(txtunidadMedida);
-        panelCampos.add(new JLabel("Precio unidad:"));
-        panelCampos.add(txtprecioUnidad);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new BorderLayout());
+
+        //Estilos
+        encabezado.setFont(new java.awt.Font("Bodoni MT", 3, 24));
+        encabezado.setForeground(new Color(161, 20, 25));
+        encabezadologo.setFont(new java.awt.Font("Bodoni MT", 3, 28));
+        encabezadologo.setForeground(new Color(161, 20, 25));
+        nombre.setFont(new java.awt.Font("Bodoni MT", 3, 20));
+        nombre.setForeground(new Color(161, 20, 25));
+        stock.setFont(new java.awt.Font("Bodoni MT", 3, 20));
+        stock.setForeground(new Color(161, 20, 25));
+        unidadMedida.setFont(new java.awt.Font("Bodoni MT", 3, 20));
+        unidadMedida.setForeground(new Color(161, 20, 25));
+        precioUnidadMedida.setFont(new java.awt.Font("Bodoni MT", 3, 20));
+        precioUnidadMedida.setForeground(new Color(161, 20, 25));
+        titulo.setBackground(new Color(250,250,250));
+        panelcampos.setBackground(new Color(250,250,250));
+        agregarButton.setForeground(new Color(161,20,25));
+        actualizarButton.setForeground(new Color(161,20,25));
+        eliminarButton.setForeground(new Color(161,20,25));
+        limpiarButton.setForeground(new Color(161,20,25));
+
+        //Margenes
+        panelPrincipal.setBorder(new EmptyBorder(5,5,5,5));
+        panelcampos.setBorder(new EmptyBorder(2,40,5,40));
+
+        //Añade los componentes a los paneles
+        titulo.add(encabezado, BorderLayout.WEST);
+        titulo.add(encabezadologo, BorderLayout.EAST);
+        panelcampos.add(nombre);
+        panelcampos.add(txtNombre);
+        panelcampos.add(stock);
+        panelcampos.add(txtStock);
+        panelcampos.add(unidadMedida);
+        panelcampos.add(txtunidadMedida);
+        panelcampos.add(precioUnidadMedida);
+        panelcampos.add(txtprecioUnidad);
+        panelbotones.add(agregarButton);
+        panelbotones.add(actualizarButton);
+        panelbotones.add(eliminarButton);
+        panelbotones.add(limpiarButton);
+
+        //Añade los paneles al frame principal
+        panelPrincipal.add(titulo, BorderLayout.NORTH);
+        panelPrincipal.add(panelcampos, BorderLayout.CENTER);
+        panelPrincipal.add(panelbotones, BorderLayout.EAST);
+        panelPrincipal.add(new JScrollPane(tableMateriaPrima), BorderLayout.SOUTH);
 
 
-        JPanel panelBotones = new JPanel();
-        panelBotones.add(agregarButton);
-        panelBotones.add(actualizarButton);
-        panelBotones.add(eliminarButton);
-        panelBotones.add(limpiarButton);
 
-        add(panelCampos, BorderLayout.NORTH);
-        add(panelBotones);
-        add(new JScrollPane(tableMateriaPrima), BorderLayout.SOUTH);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        add(panelPrincipal);
         setTitle("Inventario materia prima");
         pack();
         setLocationRelativeTo(null);
