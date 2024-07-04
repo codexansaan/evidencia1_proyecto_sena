@@ -58,6 +58,54 @@ public class IinvetariomateriaPrima extends javax.swing.JFrame {
 
                 }
             });
+            agregarButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            actualizarButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            eliminarButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            limpiarButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            txtNombre.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            txtStock.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            txtunidadMedida.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            txtprecioUnidad.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
         }
 
     private void initComponents() {
@@ -102,14 +150,20 @@ public class IinvetariomateriaPrima extends javax.swing.JFrame {
         precioUnidadMedida.setForeground(new Color(161, 20, 25));
         titulo.setBackground(new Color(250,250,250));
         panelcampos.setBackground(new Color(250,250,250));
+        panelbotones.setBackground(new Color(250,250,250));
+        agregarButton.setFont(new java.awt.Font("Bodoni MT",2,18));
         agregarButton.setForeground(new Color(161,20,25));
+        actualizarButton.setFont(new java.awt.Font("Bodoni MT",2,18));
         actualizarButton.setForeground(new Color(161,20,25));
+        eliminarButton.setFont(new java.awt.Font("Bodoni MT",2,18));
         eliminarButton.setForeground(new Color(161,20,25));
+        limpiarButton.setFont(new java.awt.Font("Bodoni MT",2,18));
         limpiarButton.setForeground(new Color(161,20,25));
 
         //Margenes
         panelPrincipal.setBorder(new EmptyBorder(5,5,5,5));
         panelcampos.setBorder(new EmptyBorder(2,40,5,40));
+        panelbotones.setBorder(new EmptyBorder(5,5,10,15));
 
         //Añade los componentes a los paneles
         titulo.add(encabezado, BorderLayout.WEST);
@@ -179,6 +233,8 @@ public class IinvetariomateriaPrima extends javax.swing.JFrame {
     public JButton getLimpiarButton() {
         return limpiarButton;
     }
+
+
 
 
 }

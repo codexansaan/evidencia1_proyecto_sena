@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ControladorMateriaPrima implements ActionListener {
@@ -35,13 +36,14 @@ public class ControladorMateriaPrima implements ActionListener {
 
     private void AgregarEventos() {
         materiaPrimavista.getAgregarButton().addActionListener(this);
-        materiaPrimavista.getActualizarButton().addActionListener(this);
-        materiaPrimavista.getEliminarButton().addActionListener(this);
+        materiaPrimavista.getActualizarButton().addActionListener(e -> actualizarMateriaPrima());
+        materiaPrimavista.getEliminarButton().addActionListener(e -> eliminarProductos());
         materiaPrimavista.getLimpiarButton().addActionListener(e -> limpiarcampos());
         materiaPrimavista.getTableMateriaPrima().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 llenarCampos(e);
+                listarTabla();
 
             }
         });
@@ -103,7 +105,7 @@ public class ControladorMateriaPrima implements ActionListener {
             precioUnidad = Double.parseDouble(materiaPrimavista.getTxtprecioUnidad().getText());
             return true;
         }catch (NumberFormatException e) {
-            JOptionPane.showInternalMessageDialog(null,"Los campos Precio, Stock, Precio unidad deben ser numericos",
+            JOptionPane.showInternalMessageDialog(null,"Los campos Stock y Precio unidad deben ser numericos",
                     "error",JOptionPane.ERROR);
             System.out.println("Error al cargar los datos" + e);
             return false;
@@ -116,7 +118,7 @@ public class ControladorMateriaPrima implements ActionListener {
         materiaPrimavista.getTxtunidadMedida().setText("");
         materiaPrimavista.getTxtprecioUnidad().setText("");
         nombre = "";
-        stock = Double.parseDouble("");
+        stock = Double.parseDouble((""));
         unidadMedida = "";
         precioUnidad = Double.parseDouble("");
     }
@@ -136,6 +138,30 @@ public class ControladorMateriaPrima implements ActionListener {
             listarTabla();
         }
     }
+
+    private void eliminarProductos() {
+
+        try {
+            nombre = materiaPrimavista.getTxtNombre().getText();
+            if ("".equals(materiaPrimavista.getTxtNombre().getText())) {
+                JOptionPane.showMessageDialog(null, "Ingrese el nombre de la materia prima");
+            } else {
+                materiaPrimaDao.eliminarMateriaPrima(nombre);
+                JOptionPane.showMessageDialog(null, "Registro eliminado con éxito");
+            }
+        }catch (NumberFormatException e){
+            System.out.println("Error al eliminar el registro");
+        }finally {
+            listarTabla();
+        }
+
+    }
+
+    private void actualizarMateriaPrima(){
+        materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
+        listarTabla();
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
