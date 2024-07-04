@@ -48,6 +48,7 @@ public class MateriaPrimaDao {
     public void Agregar(MateriaPrima materiaPrima) {
         String sql = "INSERT INTO materiaprima (Nombre, Stock, unidadmedida, preciounidad) VALUES (?,?,?,?)";
         try{
+
             conexi = conexion.ConectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
             statement.setString(1, materiaPrima.getNombre());
@@ -82,16 +83,34 @@ public class MateriaPrimaDao {
         }
     }
 
+    //Validar nombre de materia prima repetida
+    public boolean esNombreDuplicado(String nombre) {
+        String sql = "SELECT COUNT(*) FROM materiaprima WHERE nombre = ?";
+        try {
+            conexi = conexion.ConectarBaseDeDatos();
+            statement = conexi.prepareStatement(sql);
+
+            statement.setString(1, nombre);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+            System.out.println("Ya existe un registro con éste nombre.");
+        } catch (SQLException e) {
+            System.err.println("Error en el método esNombreDuplicado de ProductoDAO: " + e.getMessage());
+        }
+        return false;
+
+    }//Fin de nombre duplicado
+
     public void actualizarMateriaPrima(MateriaPrima materiaPrima) {
         String sql = "UPDATE materiaprima SET stock = ?, unidadMedida = ?, precioUnidad = ? WHERE nombre = ?";
 
         try {
             conexi = conexion.ConectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
-            statement.setDouble(1, materiaPrima.getStock());
-            /*statement.setString(2, materiaPrima.getUnidadMedida());
-            statement.setDouble(3, materiaPrima.getPrecioUnidad());
-            statement.setString(4, materiaPrima.getNombre());*/
+
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {

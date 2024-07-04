@@ -35,7 +35,7 @@ public class ControladorMateriaPrima implements ActionListener {
     }
 
     private void AgregarEventos() {
-        materiaPrimavista.getAgregarButton().addActionListener(this);
+        materiaPrimavista.getAgregarButton().addActionListener(e -> agregarProductos());
         materiaPrimavista.getActualizarButton().addActionListener(e -> actualizarMateriaPrima());
         materiaPrimavista.getEliminarButton().addActionListener(e -> eliminarProductos());
         materiaPrimavista.getLimpiarButton().addActionListener(e -> limpiarcampos());
@@ -63,28 +63,29 @@ public class ControladorMateriaPrima implements ActionListener {
             });
         }
         materiaPrimavista.getTableMateriaPrima().setModel(tableModel);
-        materiaPrimavista.getTableMateriaPrima().setPreferredSize(new Dimension(350, tableModel.getRowCount()*16));
+        materiaPrimavista.getTableMateriaPrima().setPreferredSize(new Dimension(350, tableModel.getRowCount() * 16));
     }
 
     private void llenarCampos(MouseEvent e) {
         JTable target = (JTable) e.getSource();
-                materiaPrimavista.getTxtNombre()
-                        .setText(materiaPrimavista.getTableMateriaPrima().getModel()
-                                .getValueAt(target.getSelectedRow(),1)
-                                .toString());
-                materiaPrimavista.getTxtStock()
-                        .setText(materiaPrimavista.getTableMateriaPrima().getModel()
-                                .getValueAt(target.getSelectedRow(),2)
-                                .toString());
-                materiaPrimavista.getTxtunidadMedida()
-                        .setText(materiaPrimavista.getTableMateriaPrima().getModel()
-                                .getValueAt(target.getSelectedRow(),3)
-                                .toString());
-                materiaPrimavista.getTxtprecioUnidad()
-                        .setText(materiaPrimavista.getTableMateriaPrima().getModel()
-                                .getValueAt(target.getSelectedRow(),4)
-                                .toString());//Para el inventario
-            }
+        materiaPrimavista.getTxtNombre()
+                .setText(materiaPrimavista.getTableMateriaPrima().getModel()
+                        .getValueAt(target.getSelectedRow(), 1)
+                        .toString());
+        materiaPrimavista.getTxtStock()
+                .setText(materiaPrimavista.getTableMateriaPrima().getModel()
+                        .getValueAt(target.getSelectedRow(), 2)
+                        .toString());
+        materiaPrimavista.getTxtunidadMedida()
+                .setText(materiaPrimavista.getTableMateriaPrima().getModel()
+                        .getValueAt(target.getSelectedRow(), 3)
+                        .toString());
+        materiaPrimavista.getTxtprecioUnidad()
+                .setText(materiaPrimavista.getTableMateriaPrima().getModel()
+                        .getValueAt(target.getSelectedRow(), 4)
+                        .toString());//Para el inventario
+    }
+
     private boolean validarDatos() {
         if ("".equals(materiaPrimavista.getTxtNombre().getText()) ||
                 "".equals(materiaPrimavista.getTxtStock().getText()) ||
@@ -94,6 +95,7 @@ public class ControladorMateriaPrima implements ActionListener {
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+
         return true;
     }
 
@@ -103,6 +105,7 @@ public class ControladorMateriaPrima implements ActionListener {
             stock = Double.parseDouble(materiaPrimavista.getTxtStock().getText());
             unidadMedida = materiaPrimavista.getTxtprecioUnidad().getText();
             precioUnidad = Double.parseDouble(materiaPrimavista.getTxtprecioUnidad().getText());
+
             return true;
         }catch (NumberFormatException e) {
             JOptionPane.showInternalMessageDialog(null,"Los campos Stock y Precio unidad deben ser numericos",
@@ -126,12 +129,12 @@ public class ControladorMateriaPrima implements ActionListener {
     private void agregarProductos() {
         try {
             if (validarDatos()){
-                if (cargardatos()){
-                    MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);
-                    materiaPrimaDao.Agregar(materiaPrima);
-                    JOptionPane.showMessageDialog(null, "Registro agregado con éxito");
+               if (cargardatos()) {
+                        MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);
+                        materiaPrimaDao.Agregar(materiaPrima);
+                        JOptionPane.showMessageDialog(null, "Registro agregado con éxito");
+                    }
                 }
-            }
         }catch (Exception e){
             System.out.println("Error al agregar (ControladorProducto");
         }finally {
@@ -158,8 +161,14 @@ public class ControladorMateriaPrima implements ActionListener {
     }
 
     private void actualizarMateriaPrima(){
+
+        nombre = materiaPrimavista.getTxtNombre().getText();
+        stock = Double.parseDouble(materiaPrimavista.getTxtStock().getText());
+        unidadMedida = materiaPrimavista.getTxtprecioUnidad().getText();
+        precioUnidad = Double.parseDouble(materiaPrimavista.getTxtprecioUnidad().getText());
         materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
         listarTabla();
+
     }
 
 
