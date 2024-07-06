@@ -2,13 +2,14 @@ package Model;
 
 import Controller.ConexionBD;
 
+
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+
 
 
 public class MateriaPrimaDao {
@@ -56,8 +57,10 @@ public class MateriaPrimaDao {
             statement.setString(3, materiaPrima.getUnidadMedida());
             statement.setDouble(4, materiaPrima.getPrecioUnidad());
             statement.executeUpdate();
+
+
         }catch (SQLException e) {
-            System.err.println("Error en el método Agregar clase MateriaPrimaDao" + e);
+            System.err.println("Error en el método Agregar clase MateriaPrimaDao" + e.getMessage());
         }
     }//Fin método agregar
 
@@ -84,43 +87,55 @@ public class MateriaPrimaDao {
     }
 
     //Validar nombre de materia prima repetida
-    public boolean esNombreDuplicado(String nombre) {
+    public int esNombreDuplicado(String nombre) {
         String sql = "SELECT COUNT(*) FROM materiaprima WHERE nombre = ?";
+        int count = 0;
         try {
             conexi = conexion.ConectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
+            statement.setString(1, String.valueOf(nombre));
+            resultSet = statement.executeQuery();
+            try {
+                if (resultSet.next()) {
+                    count = resultSet.getInt(1);
 
-            statement.setString(1, nombre);
-            try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
+                }
+            } catch (SQLException e) {
+                System.err.println("Error en el método contarNombresDuplicados de ProductoDAO: " + e.getMessage());
+
+                if (count > 0) {
+                    JOptionPane.showMessageDialog(null, "Ya existe " + count + " registro con éste nombre.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    System.out.println("Ya existe " + count + " registro con éste nombre.");
+
                 }
             }
-            System.out.println("Ya existe un registro con éste nombre.");
-        } catch (SQLException e) {
-            System.err.println("Error en el método esNombreDuplicado de ProductoDAO: " + e.getMessage());
+        }catch (SQLException e) {
+            System.err.println("Error en el método contarNombresDuplicados de ProductoDAO: " + e.getMessage());
         }
-        return false;
 
+        return count;
     }//Fin de nombre duplicado
 
     public void actualizarMateriaPrima(MateriaPrima materiaPrima) {
         String sql = "UPDATE materiaprima SET stock = ?, unidadMedida = ?, precioUnidad = ? WHERE nombre = ?";
+        try{
 
-        try {
             conexi = conexion.ConectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
+            statement.setString(1, materiaPrima.getNombre());
+            statement.setDouble(2, materiaPrima.getStock());
+            statement.setString(3, materiaPrima.getUnidadMedida());
+            statement.setDouble(4, materiaPrima.getPrecioUnidad());
+            statement.executeUpdate();
 
-            int rowsAffected = statement.executeUpdate();
 
-            if (rowsAffected > 0) {
-                System.out.println("Registro actualizado con éxito.");
-            } else {
-                System.out.println("No se encontró ningún registro con ese nombre.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Error en el método actualizarMateriaPrima: " + e.getMessage());
+        }catch (SQLException e) {
+            System.err.println("Error en el método Agregar clase MateriaPrimaDao" + e);
         }
+
+
+
     }
 
 

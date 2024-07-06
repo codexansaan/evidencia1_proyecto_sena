@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLException;
+
 import java.util.List;
 
 public class ControladorMateriaPrima implements ActionListener {
@@ -35,8 +35,8 @@ public class ControladorMateriaPrima implements ActionListener {
     }
 
     private void AgregarEventos() {
-        materiaPrimavista.getAgregarButton().addActionListener(e -> agregarProductos());
-        materiaPrimavista.getActualizarButton().addActionListener(e -> actualizarMateriaPrima());
+        materiaPrimavista.getAgregarButton().addActionListener(this);
+        materiaPrimavista.getActualizarButton().addActionListener(e -> validarduplicados());
         materiaPrimavista.getEliminarButton().addActionListener(e -> eliminarProductos());
         materiaPrimavista.getLimpiarButton().addActionListener(e -> limpiarcampos());
         materiaPrimavista.getTableMateriaPrima().addMouseListener(new MouseAdapter() {
@@ -65,7 +65,7 @@ public class ControladorMateriaPrima implements ActionListener {
         materiaPrimavista.getTableMateriaPrima().setModel(tableModel);
         materiaPrimavista.getTableMateriaPrima().setPreferredSize(new Dimension(350, tableModel.getRowCount() * 16));
     }
-
+    //LLena los campos del formulario con los datos de la tabla.
     private void llenarCampos(MouseEvent e) {
         JTable target = (JTable) e.getSource();
         materiaPrimavista.getTxtNombre()
@@ -85,7 +85,7 @@ public class ControladorMateriaPrima implements ActionListener {
                         .getValueAt(target.getSelectedRow(), 4)
                         .toString());//Para el inventario
     }
-
+    //Valida que no existan campos vacios
     private boolean validarDatos() {
         if ("".equals(materiaPrimavista.getTxtNombre().getText()) ||
                 "".equals(materiaPrimavista.getTxtStock().getText()) ||
@@ -98,12 +98,12 @@ public class ControladorMateriaPrima implements ActionListener {
 
         return true;
     }
-
+    //Carga los datos para agregar
     private boolean cargardatos() {
         try {
             nombre = materiaPrimavista.getTxtNombre().getText();
             stock = Double.parseDouble(materiaPrimavista.getTxtStock().getText());
-            unidadMedida = materiaPrimavista.getTxtprecioUnidad().getText();
+            unidadMedida = materiaPrimavista.getTxtunidadMedida().getText();
             precioUnidad = Double.parseDouble(materiaPrimavista.getTxtprecioUnidad().getText());
 
             return true;
@@ -114,7 +114,7 @@ public class ControladorMateriaPrima implements ActionListener {
             return false;
         }
     }
-
+    //Limpia los campos del formulario
     private void limpiarcampos(){
         materiaPrimavista.getTxtNombre().setText("");
         materiaPrimavista.getTxtStock().setText("");
@@ -128,17 +128,20 @@ public class ControladorMateriaPrima implements ActionListener {
 
     private void agregarProductos() {
         try {
-            if (validarDatos()){
-               if (cargardatos()) {
-                        MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);
-                        materiaPrimaDao.Agregar(materiaPrima);
-                        JOptionPane.showMessageDialog(null, "Registro agregado con éxito");
+
+
+                    if (validarDatos()) {
+                        if (cargardatos()) {
+                            MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);
+                            materiaPrimaDao.Agregar(materiaPrima);
+                            JOptionPane.showMessageDialog(null, "Registro agregado con éxito");
+                        }
                     }
-                }
         }catch (Exception e){
             System.out.println("Error al agregar (ControladorProducto");
         }finally {
             listarTabla();
+            limpiarcampos();
         }
     }
 
@@ -156,20 +159,51 @@ public class ControladorMateriaPrima implements ActionListener {
             System.out.println("Error al eliminar el registro");
         }finally {
             listarTabla();
+            limpiarcampos();
         }
 
     }
 
-    private void actualizarMateriaPrima(){
+    //Validar duplicados
+    private void validarduplicados() {
 
-        nombre = materiaPrimavista.getTxtNombre().getText();
-        stock = Double.parseDouble(materiaPrimavista.getTxtStock().getText());
-        unidadMedida = materiaPrimavista.getTxtprecioUnidad().getText();
-        precioUnidad = Double.parseDouble(materiaPrimavista.getTxtprecioUnidad().getText());
-        materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
-        listarTabla();
+        try {
+            nombre = materiaPrimavista.getTxtNombre().getText();
+            int duplicados = materiaPrimaDao.esNombreDuplicado(nombre);
 
+            if (duplicados > 0) {
+                System.out.println(".");
+                int response = JOptionPane.showConfirmDialog(null, "No se puede agregar la materia prima porque ya existe uno con ese nombre. " +
+                        " Desea actualizar la materia prima", "Confirmación", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
+                } else if (response == JOptionPane.NO_OPTION) {
+                    limpiarcampos();
+                }
+            }
+        }catch(NumberFormatException e) {
+            System.err.println("Error al validar los nombres duplicados");
+        }
     }
+
+       /* public static void main(String[] args) {
+            MateriaPrimaDao materiaPrimaDao = new MateriaPrimaDao();
+
+            // Crear un objeto MateriaPrima con valores de prueba
+            MateriaPrima materiaPrima = new MateriaPrima();
+            materiaPrima.setNombre("Harina");
+            materiaPrima.setStock(500.0);
+            materiaPrima.setUnidadMedida("kg");
+            materiaPrima.setPrecioUnidad(1.5);
+
+            // Llamar al método de actualización
+            materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
+        }*/
+
+
+
+
+
 
 
     @Override
