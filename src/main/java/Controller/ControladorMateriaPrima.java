@@ -36,7 +36,7 @@ public class ControladorMateriaPrima implements ActionListener {
 
     private void AgregarEventos() {
         materiaPrimavista.getAgregarButton().addActionListener(this);
-        materiaPrimavista.getActualizarButton().addActionListener(e -> validarduplicados());
+        materiaPrimavista.getActualizarButton().addActionListener(e -> invocaActualizar());
         materiaPrimavista.getEliminarButton().addActionListener(e -> eliminarProductos());
         materiaPrimavista.getLimpiarButton().addActionListener(e -> limpiarcampos());
         materiaPrimavista.getTableMateriaPrima().addMouseListener(new MouseAdapter() {
@@ -128,20 +128,24 @@ public class ControladorMateriaPrima implements ActionListener {
 
     private void agregarProductos() {
         try {
+            if (validarduplicados()) {
+                System.out.println("Ya existe un producto con ese nombre.");
 
-
-                    if (validarDatos()) {
-                        if (cargardatos()) {
-                            MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);
-                            materiaPrimaDao.Agregar(materiaPrima);
-                            JOptionPane.showMessageDialog(null, "Registro agregado con éxito");
-                        }
-                    }
+            }else if (validarDatos()) {
+                    if (cargardatos()) {
+                        MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);materiaPrimaDao.Agregar(materiaPrima);
+                        JOptionPane.showMessageDialog(null, "Registro agregado con éxito");
+                        System.out.println("EJecuta else if");
+                        listarTabla();
+                        limpiarcampos();
+                }
+            }
         }catch (Exception e){
-            System.out.println("Error al agregar (ControladorProducto");
+            System.out.println("Error al agregar ControladorProducto" + e);
         }finally {
             listarTabla();
-            limpiarcampos();
+
+
         }
     }
 
@@ -164,57 +168,44 @@ public class ControladorMateriaPrima implements ActionListener {
 
     }
 
-    //Validar duplicados
-    private void validarduplicados() {
+    private void invocaActualizar() {
+        String nombre = materiaPrimavista.getTxtNombre().getText();
+        double stock = Double.parseDouble(materiaPrimavista.getTxtStock().getText());
+        String unidadMedida = materiaPrimavista.getTxtunidadMedida().getText();
+        double precioUnidad = Double.parseDouble(materiaPrimavista.getTxtprecioUnidad().getText());
 
+        MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);
+
+        materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
+        JOptionPane.showMessageDialog(null, "Registro actualizado con éxito");
+        listarTabla();
+        limpiarcampos();
+
+    }
+
+    //Validar duplicados
+    private boolean validarduplicados() {
         try {
             nombre = materiaPrimavista.getTxtNombre().getText();
             int duplicados = materiaPrimaDao.esNombreDuplicado(nombre);
-
+            System.out.println(nombre);
             if (duplicados > 0) {
-                System.out.println(".");
-                int response = JOptionPane.showConfirmDialog(null, "No se puede agregar la materia prima porque ya existe uno con ese nombre. " +
-                        " Desea actualizar la materia prima", "Confirmación", JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
-                } else if (response == JOptionPane.NO_OPTION) {
-                    limpiarcampos();
-                }
+                JOptionPane.showMessageDialog(null, "Ya existe una materia prima con ese nombre, por favor actualice");
             }
-        }catch(NumberFormatException e) {
-            System.err.println("Error al validar los nombres duplicados");
+        } catch (NumberFormatException e) {
+            System.err.println("Error al validar los nombres duplicados: " + e.getMessage());
         }
+        return false;
     }
-
-       /* public static void main(String[] args) {
-            MateriaPrimaDao materiaPrimaDao = new MateriaPrimaDao();
-
-            // Crear un objeto MateriaPrima con valores de prueba
-            MateriaPrima materiaPrima = new MateriaPrima();
-            materiaPrima.setNombre("Harina");
-            materiaPrima.setStock(500.0);
-            materiaPrima.setUnidadMedida("kg");
-            materiaPrima.setPrecioUnidad(1.5);
-
-            // Llamar al método de actualización
-            materiaPrimaDao.actualizarMateriaPrima(materiaPrima);
-        }*/
-
-
-
-
-
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()== materiaPrimavista.getAgregarButton()){
             agregarProductos();
         }
-    } //materiaPrimavista.getTableMateriaPrima().setModel(tableModel);
+    }
 
 }
-    //Llenar campos de la tabla
+
 
 
 
