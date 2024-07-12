@@ -2,7 +2,6 @@ package Model;
 
 import Controller.ConexionBD;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +21,7 @@ public class ProductoDao {
 
         try{
 
-            connection = conexion.ConectarBaseDeDatos(); //conecta la base de datos
+            connection = conexion.conectarBaseDeDatos(); //conecta la base de datos
             statement = connection.prepareStatement(sql); //prepara la consulta sql
             resultSet = statement.executeQuery();//ejecuta en el servidor
             while(resultSet.next()){

@@ -2,7 +2,7 @@ package Controller;
 
 import Model.MateriaPrima;
 import Model.MateriaPrimaDao;
-import View.IinvetariomateriaPrima;
+import View.IinvetarioMateriaPrima;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,11 +23,11 @@ public class ControladorMateriaPrima implements ActionListener {
     //Instancias
     MateriaPrima materiaPrima = new MateriaPrima();
     MateriaPrimaDao materiaPrimaDao = new MateriaPrimaDao();
-    IinvetariomateriaPrima materiaPrimavista = new IinvetariomateriaPrima();
+    IinvetarioMateriaPrima materiaPrimavista = new IinvetarioMateriaPrima();
     DefaultTableModel tableModel = new DefaultTableModel();
 
     //Constructor que recibe la vista como parametro
-    public ControladorMateriaPrima(IinvetariomateriaPrima _materiaPrimavista) {
+    public ControladorMateriaPrima(IinvetarioMateriaPrima _materiaPrimavista) {
         this.materiaPrimavista = _materiaPrimavista;
         materiaPrimavista.setVisible(true);
         AgregarEventos();
@@ -36,7 +36,7 @@ public class ControladorMateriaPrima implements ActionListener {
 
     private void AgregarEventos() {
         materiaPrimavista.getAgregarButton().addActionListener(this);
-        materiaPrimavista.getActualizarButton().addActionListener(e -> invocaActualizar());
+        materiaPrimavista.getActualizarButton().addActionListener(e -> invocarActualizar());
         materiaPrimavista.getEliminarButton().addActionListener(e -> eliminarProductos());
         materiaPrimavista.getLimpiarButton().addActionListener(e -> limpiarcampos());
         materiaPrimavista.getTableMateriaPrima().addMouseListener(new MouseAdapter() {
@@ -63,7 +63,8 @@ public class ControladorMateriaPrima implements ActionListener {
             });
         }
         materiaPrimavista.getTableMateriaPrima().setModel(tableModel);
-        materiaPrimavista.getTableMateriaPrima().setPreferredSize(new Dimension(350, tableModel.getRowCount() * 16));
+        materiaPrimavista.getTableMateriaPrima().setPreferredSize(new Dimension
+                (350, tableModel.getRowCount() * 16));
     }
     //LLena los campos del formulario con los datos de la tabla.
     private void llenarCampos(MouseEvent e) {
@@ -108,7 +109,8 @@ public class ControladorMateriaPrima implements ActionListener {
 
             return true;
         }catch (NumberFormatException e) {
-            JOptionPane.showInternalMessageDialog(null,"Los campos Stock y Precio unidad deben ser numericos",
+            JOptionPane.showInternalMessageDialog(null,"Los campos Stock " +
+                            "y Precio unidad deben ser numericos",
                     "error",JOptionPane.ERROR);
             System.out.println("Error al cargar los datos" + e);
             return false;
@@ -133,19 +135,20 @@ public class ControladorMateriaPrima implements ActionListener {
 
             }else if (validarDatos()) {
                     if (cargardatos()) {
-                        MateriaPrima materiaPrima = new MateriaPrima(nombre, stock, unidadMedida, precioUnidad);materiaPrimaDao.Agregar(materiaPrima);
-                        JOptionPane.showMessageDialog(null, "Registro agregado con éxito");
+                        MateriaPrima materiaPrima = new MateriaPrima(nombre, stock,
+                                unidadMedida, precioUnidad);
+                        materiaPrimaDao.agregarMateriaPrima(materiaPrima);
+                        JOptionPane.showMessageDialog(null,
+                                "Registro agregado con éxito");
                         System.out.println("EJecuta else if");
                         listarTabla();
                         limpiarcampos();
-                }
+                    }
             }
         }catch (Exception e){
             System.out.println("Error al agregar ControladorProducto" + e);
         }finally {
             listarTabla();
-
-
         }
     }
 
@@ -154,10 +157,12 @@ public class ControladorMateriaPrima implements ActionListener {
         try {
             nombre = materiaPrimavista.getTxtNombre().getText();
             if ("".equals(materiaPrimavista.getTxtNombre().getText())) {
-                JOptionPane.showMessageDialog(null, "Ingrese el nombre de la materia prima");
+                JOptionPane.showMessageDialog(null,
+                        "Ingrese el nombre de la materia prima");
             } else {
                 materiaPrimaDao.eliminarMateriaPrima(nombre);
-                JOptionPane.showMessageDialog(null, "Registro eliminado con éxito");
+                JOptionPane.showMessageDialog(null,
+                        "Registro eliminado con éxito");
             }
         }catch (NumberFormatException e){
             System.out.println("Error al eliminar el registro");
@@ -168,7 +173,7 @@ public class ControladorMateriaPrima implements ActionListener {
 
     }
 
-    private void invocaActualizar() {
+    private void invocarActualizar() {
         String nombre = materiaPrimavista.getTxtNombre().getText();
         double stock = Double.parseDouble(materiaPrimavista.getTxtStock().getText());
         String unidadMedida = materiaPrimavista.getTxtunidadMedida().getText();
@@ -190,7 +195,8 @@ public class ControladorMateriaPrima implements ActionListener {
             int duplicados = materiaPrimaDao.esNombreDuplicado(nombre);
             System.out.println(nombre);
             if (duplicados > 0) {
-                JOptionPane.showMessageDialog(null, "Ya existe una materia prima con ese nombre, por favor actualice");
+                JOptionPane.showMessageDialog(null,
+                        "Ya existe una materia prima con ese nombre, por favor actualice");
             }
         } catch (NumberFormatException e) {
             System.err.println("Error al validar los nombres duplicados: " + e.getMessage());

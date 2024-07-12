@@ -25,7 +25,7 @@ public class MateriaPrimaDao {
         List<MateriaPrima> listaMateriaPrima = new ArrayList<>();
 
         try{
-            conexi = conexion.ConectarBaseDeDatos();
+            conexi = conexion.conectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
             resultSet = statement.executeQuery();
 
@@ -46,11 +46,11 @@ public class MateriaPrimaDao {
     }//Fin metodo listar.
 
     //Método para agregar registros a la base de datos
-    public void Agregar(MateriaPrima materiaPrima) {
+    public void agregarMateriaPrima(MateriaPrima materiaPrima) {
         String sql = "INSERT INTO materiaprima (Nombre, Stock, unidadmedida, preciounidad) VALUES (?,?,?,?)";
         try{
 
-            conexi = conexion.ConectarBaseDeDatos();
+            conexi = conexion.conectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
             statement.setString(1, materiaPrima.getNombre());
             statement.setDouble(2, materiaPrima.getStock());
@@ -60,7 +60,7 @@ public class MateriaPrimaDao {
 
 
         }catch (SQLException e) {
-            System.err.println("Error en el método Agregar clase MateriaPrimaDao" + e.getMessage());
+            System.err.println("Error en el método agregarMateriaPrima clase MateriaPrimaDao" + e.getMessage());
         }
     }//Fin método agregar
 
@@ -69,7 +69,7 @@ public class MateriaPrimaDao {
         String sql = "DELETE FROM materiaprima WHERE nombre = ?";
 
         try {
-            conexi = conexion.ConectarBaseDeDatos();
+            conexi = conexion.conectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
             statement.setString(1, String.valueOf(nombre));
             int rowsAffected = statement.executeUpdate();
@@ -78,7 +78,8 @@ public class MateriaPrimaDao {
                 System.out.println("Registro eliminado con éxito.");
             } else {
                 System.out.println("No se encontró ningún registro con ese nombre.");
-                JOptionPane.showMessageDialog(null, "No se encontró ningún registro con ese nombre.",
+                JOptionPane.showMessageDialog(null,
+                        "No se encontró ningún registro con ese nombre.",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
@@ -91,7 +92,7 @@ public class MateriaPrimaDao {
         String sql = "SELECT COUNT(*) FROM materiaprima WHERE nombre = ?";
         int count = 0;
         try {
-            conexi = conexion.ConectarBaseDeDatos();
+            conexi = conexion.conectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
             statement.setString(1, String.valueOf(nombre));
             resultSet = statement.executeQuery();
@@ -100,32 +101,25 @@ public class MateriaPrimaDao {
                     count = resultSet.getInt(1);
                 }
             } catch (SQLException e) {
-                System.err.println("Error en el método contarNombresDuplicados de ProductoDAO: " + e.getMessage());
-
-                /*if (count >  0 ) {
-                    JOptionPane.showMessageDialog(null, "Ya existe " + count + " registro con éste nombre.",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    System.out.println("Ya existe " + count + " registro con éste nombre.");
-                    MateriaPrima MateriaPrima = new MateriaPrima();
-                    actualizarMateriaPrima(MateriaPrima);
-
-                }*/
+                System.err.println("Error en el método contarNombresDuplicados de ProductoDAO: "
+                        + e.getMessage());
             }
         }catch (SQLException e) {
-            System.err.println("Error en el método contarNombresDuplicados de ProductoDAO: " + e.getMessage());
+            System.err.println("Error en el método contarNombresDuplicados de ProductoDAO: "
+                    + e.getMessage());
         }
         return count;
     }//Fin de nombre duplicado
+
     public void actualizarMateriaPrima(MateriaPrima materiaPrima) {
         String sql = "UPDATE materiaprima SET stock = ?, unidadMedida = ?, precioUnidad = ? WHERE nombre = ?";
         try {
-            conexi = conexion.ConectarBaseDeDatos();
+            conexi = conexion.conectarBaseDeDatos();
             statement = conexi.prepareStatement(sql);
             statement.setDouble(1, materiaPrima.getStock());
             statement.setString(2, materiaPrima.getUnidadMedida());
             statement.setDouble(3, materiaPrima.getPrecioUnidad());
             statement.setString(4, materiaPrima.getNombre());
-
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -133,65 +127,9 @@ public class MateriaPrimaDao {
             } else {
                 System.out.println("No se encontró ningún registro con ese nombre.");
             }
-
-            System.out.println(materiaPrima.getNombre());
-            System.out.println(materiaPrima.getStock());
-            System.out.println(materiaPrima.getUnidadMedida());
-            System.out.println(materiaPrima.getPrecioUnidad());
         } catch (SQLException e) {
-            System.err.println("Error en el método actualizarMateriaPrima de MateriaPrimaDao: " + e.getMessage());
+            System.err.println("Error en el método actualizarMateriaPrima de MateriaPrimaDao: "
+                    + e.getMessage());
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*public void actualizarMateriaPrima(MateriaPrima materiaPrima) {
-        String sql = "UPDATE materiaprima  SET stock = ?, unidadMedida = ?, precioUnidad = ?, WHERE nombre = ?";
-        try{
-
-            conexi = conexion.ConectarBaseDeDatos();
-            statement = conexi.prepareStatement(sql);
-            statement.setString(1, materiaPrima.getNombre());
-            statement.setDouble(2, materiaPrima.getStock());
-            statement.setString(3, materiaPrima.getUnidadMedida());
-            statement.setDouble(4, materiaPrima.getPrecioUnidad());
-            statement.executeUpdate();
-            System.out.println(materiaPrima.getNombre());
-            System.out.println(materiaPrima.getStock());
-            System.out.println(materiaPrima.getUnidadMedida());
-            System.out.println(materiaPrima.getPrecioUnidad());
-
-        }catch (SQLException e) {
-            System.err.println("Error en el método Agregar clase MateriaPrimaDao" + e);
-        }
-
-
-
-    }*/
-
-
-
 }

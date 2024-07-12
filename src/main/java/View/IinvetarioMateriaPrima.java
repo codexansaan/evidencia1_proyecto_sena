@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class IinvetariomateriaPrima extends javax.swing.JFrame {
+public class IinvetarioMateriaPrima extends javax.swing.JFrame {
 
     //Paneles globales
     private JPanel panelPrincipal;
@@ -42,15 +42,15 @@ public class IinvetariomateriaPrima extends javax.swing.JFrame {
 
 
 
-
+    //Metodo para crear una instancia de la vista y el controlador
     public static void main(String args[]) {
 
-        IinvetariomateriaPrima materiaPrimavista = new IinvetariomateriaPrima();
+        IinvetarioMateriaPrima materiaPrimavista = new IinvetarioMateriaPrima();
         ControladorMateriaPrima controladorMateriaPrima = new ControladorMateriaPrima(materiaPrimavista);
 
     }
     //Inicializar los componentes
-        public IinvetariomateriaPrima() {
+        public IinvetarioMateriaPrima() {
             initComponents();
             limpiarButton.addActionListener(new ActionListener() {
                 @Override
@@ -127,7 +127,7 @@ public class IinvetariomateriaPrima extends javax.swing.JFrame {
         txtunidadMedida = new JTextField(5);
         precioUnidadMedida = new JLabel("Precio unidad");
         txtprecioUnidad = new JTextField(5);
-        agregarButton = new JButton("Agregar");
+        agregarButton = new JButton("agregarMateriaPrima");
         actualizarButton = new JButton("Actualizar");
         eliminarButton = new JButton("Eliminar");
         limpiarButton = new JButton("Limpiar");

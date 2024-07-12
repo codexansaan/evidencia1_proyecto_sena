@@ -16,7 +16,7 @@ public class ConexionBD {
     String driver = "com.mysql.cj.jdbc.Driver";
 
 
-    public Connection ConectarBaseDeDatos() {
+    public Connection conectarBaseDeDatos() {
         try{
             Class.forName(driver);
             conectar = (Connection) DriverManager.getConnection(url, user, password);
@@ -28,8 +28,4 @@ public class ConexionBD {
     return conectar;
 
     };
-    public static void main(String[] args) {
-        ConexionBD conexion = new ConexionBD();
-        conexion.ConectarBaseDeDatos();
-    }
 }

@@ -1,5 +1,7 @@
 package Model;
 
+
+//Define los atributos de materiaPrima
 public class MateriaPrima {
     private int id;
     private String nombre;
@@ -12,7 +14,8 @@ public class MateriaPrima {
     }
 
     //Constructor para agregar
-    public MateriaPrima(String nombre, Double stock, String unidadMedida, Double precioUnidad) {
+    public MateriaPrima(String nombre, Double stock, String unidadMedida,
+                        Double precioUnidad) {
         this.nombre = nombre;
         this.stock = stock;
         this.unidadMedida = unidadMedida;
@@ -20,7 +23,8 @@ public class MateriaPrima {
     }
 
     //Constructor con todos los campos
-    public MateriaPrima(int id, String nombre, Double stock, String unidadMedida, Double precioUnidad) {
+    public MateriaPrima(int id, String nombre, Double stock,
+                        String unidadMedida, Double precioUnidad) {
         this.id = id;
         this.nombre = nombre;
         this.stock = stock;
@@ -29,7 +33,6 @@ public class MateriaPrima {
     }
 
     //getters y setters
-
     public int getId() {
         return id;
     }
