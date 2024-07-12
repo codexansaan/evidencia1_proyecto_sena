@@ -127,7 +127,7 @@ public class IinvetarioMateriaPrima extends javax.swing.JFrame {
         txtunidadMedida = new JTextField(5);
         precioUnidadMedida = new JLabel("Precio unidad");
         txtprecioUnidad = new JTextField(5);
-        agregarButton = new JButton("agregarMateriaPrima");
+        agregarButton = new JButton("Agregar");
         actualizarButton = new JButton("Actualizar");
         eliminarButton = new JButton("Eliminar");
         limpiarButton = new JButton("Limpiar");
